@@ -5,10 +5,10 @@
 
 context('Pricing', () => {
     beforeEach(() => {
-        cy.visit('https://www.smartlook.com/pricing/?currencyCode=CZK')
-        cy.get('#onetrust-accept-btn-handler')
-        .click()
-        
+        cy.setCookie('OptanonConsent', 'true', { log: false })
+        cy.setCookie('OptanonAlertBoxClosed', 'true', { log: false })
+        cy.visit('https://www.smartlook.com/pricing/?currencyCode=CZK')   
+      
 
     })
 

@@ -36,3 +36,63 @@
 //   }
 // }
 import 'cypress-iframe';
+import { SignUpModel, passwordStrength, passwordTips } from './signUpPOM.cy';
+
+
+interface FillCredentialsOptions {
+    username: string;
+    password: string;
+  };
+  
+  declare global {
+    namespace Cypress {
+      interface Chainable<Subject> {
+        fillCredentials(options: FillCredentialsOptions): Chainable<Subject>;
+      }
+    }
+  };
+  
+  Cypress.Commands.add('fillCredentials', (options: FillCredentialsOptions) => {
+    cy.get('#sign-up-input-email--inner').type(options.username)
+    .should('have.value', options.username);
+    cy.get('#sign-up-input-password--inner').type(options.password)
+    .should('have.value', options.password);
+  });
+  
+
+interface checkPasswordPopupOptions {
+    pass: string;
+    pStrength: number;
+    pTips: string
+  };
+  
+  declare global {
+    namespace Cypress {
+      interface Chainable<Subject> {
+        checkPasswordPopup(options: checkPasswordPopupOptions): Chainable<Subject>;
+      }
+    }
+  };
+
+  Cypress.Commands.add('checkPasswordPopup', (options) => {
+    const { pass, pStrength, pTips } = options;
+    SignUpModel.passwordField().should('be.visible')
+    .should('have.value', pass)
+    .and('have.attr', 'type', 'password');
+    SignUpModel.popUpPassword()
+    .should('contain.text', passwordStrength[pStrength])
+    .and('contain.text', passwordTips[pTips]);
+});
+
+declare global {
+    namespace Cypress {
+      interface Chainable<Subject> {
+        clearFields(): Chainable<Subject>;
+      }
+    }
+  };
+  
+  Cypress.Commands.add('clearFields', () => {
+    SignUpModel.emailField().clear();
+    SignUpModel.passwordField().clear();
+  });

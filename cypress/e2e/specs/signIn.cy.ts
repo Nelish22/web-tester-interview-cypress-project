@@ -7,16 +7,18 @@ context('Sign in', () => {
     let cred = 'testing'
 
     beforeEach(() => {
-        cy.visit('https://app.alfa.smartlook.cloud/sign/in')
+        cy.visit('/sign/in')
     })
 
     // Test sign in form
 
     it('Check placeholders', () => {
         cy.get('#sign-in-input-email--label')
-        .should('have.text', 'Email')
+        .should('be.visible')
+        .and('have.text', 'Email')
         cy.get('#sign-in-input-password--label')
-        .should('have.text', 'Password')
+        .should('be.visible')
+        .and('have.text', 'Password')
     })
 
     it('Click Login button without credentials', () => {
@@ -54,22 +56,19 @@ context('Sign in', () => {
 
     it('Check visible/hidden password', () => {
         cy.get('#sign-in-input-password--inner').type(cred)
-        .should('have.attr', 'type')
-        .and('contain', 'password')
+        .should('have.attr', 'type', 'password')
         .then(() => {
             cy.get('#sign-in-input-password--content')
             .children().eq(2).find('svg').click()
             cy.get('#sign-in-input-password--inner')
-            .should('have.attr', 'type')
-            .and('contain', 'text')
-            
-
+            .should('have.attr', 'type', 'text')
         })
     })
     
     it('Click on Sign up link', () => {
         cy.get('a#sign-in_sign-up-link')
-        .should('have.text', 'Sign up')
+        .should('be.visible')
+        .and('have.text', 'Sign up')
         .click()
         cy.url().should('contain', 'sign/up')
         // should also check that at least all sections are visible
@@ -77,7 +76,8 @@ context('Sign in', () => {
 
     it('Click on I forgot my password', () => {
         cy.get('a#sign-in_forgot-password-link')
-        .should('have.text', 'I forgot my password')
+        .should('be.visible')
+        .and('have.text', 'I forgot my password')
         .click()
         cy.url().should('contain', 'sign/reset-password')
         /* also check for visibility of all sections
@@ -87,9 +87,12 @@ context('Sign in', () => {
     })
 
     it('Login via OAuth', () => {
-        cy.get('button#sign-google-login-button').click()   // just test if button is clickable
-        cy.get('button#sign-facebook-login').click()        // same + there is actually bug (black Not found page)
-        cy.get('button#sign-sso-login-button').click()
+        cy.get('button#sign-google-login-button')
+        .should('be.visible').click()   // just test if button is clickable
+        cy.get('button#sign-facebook-login')
+        .should('be.visible').click()        // same + there is actually bug (black Not found page)
+        cy.get('button#sign-sso-login-button')
+        .should('be.visible').click()
         cy.url().should('contain', 'sign/sso')
     })
 

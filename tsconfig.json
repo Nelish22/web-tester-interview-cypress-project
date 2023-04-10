@@ -5,6 +5,7 @@
     "types": ["cypress", "@testing-library/cypress"]
   },
   "include": [
-    "**/*.ts"
+    "**/*.ts",
+    "cypress/support/commands.ts"
   ]
 }
